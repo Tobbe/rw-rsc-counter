@@ -1,0 +1,34 @@
+#####
+# Documentation
+# Redwood: https://render.com/docs/deploy-redwood
+# YAML (all config values): https://render.com/docs/yaml-spec
+#####
+
+services:
+- name: test-project-docker-web
+  type: web
+
+  runtime: docker
+  dockerfilePath: ./Dockerfile.web
+
+  plan: free
+  region: oregon
+
+- name: test-project-docker-api
+  type: web
+
+  runtime: docker
+  dockerfilePath: ./Dockerfile.api
+
+  plan: free
+  region: oregon
+
+  envVars:
+  - key: DATABASE_URL
+    fromDatabase:
+      name: test-project-docker-db
+      property: connectionString
+
+databases:
+  - name: test-project-docker-db
+    region: oregon
