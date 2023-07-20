@@ -39,7 +39,7 @@ FROM node:18-slim as serve_web
 
 ENV CI=1 \
     NODE_ENV=production \
-    API_HOST=https://test-project-docker-api-504y.onrender.com/
+    API_HOST=https://rw-rsc-counter-api.onrender.com
 
 WORKDIR /app
 
@@ -60,4 +60,4 @@ COPY --from=web_build /app/web/dist /app/web/dist
 
 EXPOSE 8910
 
-CMD "/user/bin/node" "--condition" "react-server" "./node_modules/@redwoodjs/vite/dist/runRscFeServer.js"
+CMD "/usr/bin/node" "--condition" "react-server" "./node_modules/@redwoodjs/vite/dist/runRscFeServer.js"
