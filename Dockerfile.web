@@ -60,4 +60,4 @@ COPY --from=web_build /app/web/dist /app/web/dist
 
 EXPOSE 8910
 
-CMD "/usr/bin/env" "node" "--condition" "react-server" "./node_modules/@redwoodjs/vite/dist/runRscFeServer.js"
+CMD "/usr/bin/env" "node" "--conditions" "react-server" "./node_modules/@redwoodjs/vite/dist/runRscFeServer.js"
