@@ -5,7 +5,7 @@
 #####
 
 services:
-- name: test-project-docker-web
+- name: rw-rsc-counter-web
   type: web
 
   runtime: docker
@@ -14,21 +14,21 @@ services:
   plan: free
   region: oregon
 
-- name: test-project-docker-api
-  type: web
+# - name: rw-rsc-counter-api
+#   type: web
 
-  runtime: docker
-  dockerfilePath: ./Dockerfile.api
+#   runtime: docker
+#   dockerfilePath: ./Dockerfile.api
 
-  plan: free
-  region: oregon
+#   plan: free
+#   region: oregon
 
-  envVars:
-  - key: DATABASE_URL
-    fromDatabase:
-      name: test-project-docker-db
-      property: connectionString
+#   envVars:
+#   - key: DATABASE_URL
+#     fromDatabase:
+#       name: rw-rsc-counter-db
+#       property: connectionString
 
-databases:
-  - name: test-project-docker-db
-    region: oregon
+# databases:
+#   - name: rw-rsc-counter-db
+#     region: oregon
