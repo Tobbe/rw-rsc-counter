@@ -26,42 +26,37 @@ RUN --mount=type=cache,target=/root/.yarn/berry/cache \
 COPY redwood.toml .
 COPY graphql.config.js .
 
-# api build
+# web build
 # ------------------------------------------------
-FROM base as api_build
+FROM base as web_build
 
-COPY api api
-RUN node_modules/.bin/redwood build api
+COPY web web
+RUN node_modules/.bin/redwood build web --no-prerender
 
-# serve api
+# serve web
 # ------------------------------------------------
-FROM node:18-slim as serve_api
+FROM node:18-slim as serve_web
 
 ENV CI=1 \
     NODE_ENV=production
-
-RUN apt-get update || : && apt-get install -y \
-    openssl
 
 WORKDIR /app
 
 COPY .yarn/releases .yarn/releases
 COPY .yarnrc.yml .yarnrc.yml
 COPY .yarn/plugins .yarn/plugins
-COPY api/package.json .
+COPY web/package.json .
 COPY yarn.lock yarn.lock
 
 RUN --mount=type=cache,target=/root/.yarn/berry/cache \
     --mount=type=cache,target=/root/.cache \
-    yarn workspaces focus api --production
+    yarn workspaces focus web --production
 
 COPY redwood.toml .
 COPY graphql.config.js .
 
-COPY --from=api_build /app/api/dist /app/api/dist
-COPY --from=api_build /app/api/db /app/api/db
-COPY --from=api_build /app/node_modules/.prisma /app/node_modules/.prisma
+COPY --from=web_build /app/web/dist /app/web/dist
 
-EXPOSE 8911
+EXPOSE 8910
 
-CMD [ "node_modules/.bin/rw-server", "api" ]
+CMD ["node", "--conditions", "react-server", "./node_modules/@redwoodjs/vite/dist/runRscFeServer.js"]
